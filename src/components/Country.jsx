@@ -40,7 +40,7 @@ const Country = () => {
                   <td>{a.name}</td>
                   <td>{a.description}</td>
                   <td>
-                    {a.image_url && <img src={a.image_url} alt={a.name} width="80" />}
+                    {a.image_url && <img src={a.image_url} alt={a.name} width="150" />}
                   </td>
                 </tr>
               ))}
