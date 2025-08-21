@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { useLocation } from 'react-router-dom';
+import { useParams, useLocation, useNavigate } from 'react-router-dom';
 import { MapContainer, TileLayer } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import countryTranslations from '../utils/country_translations.json';
@@ -10,6 +9,7 @@ const Country = () => {
   const spanishName = countryTranslations[name] || name;
   const location = useLocation();
   const countryData = location.state;
+  const navigate = useNavigate();
   
   const [animales, setAnimales] = useState([]);
 
@@ -22,7 +22,18 @@ const Country = () => {
 
   return (
     <div className="container mt-4">
-      <h2 className="mb-4">{decodeURIComponent(spanishName)}</h2>
+      
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h2 className="mb-4">{decodeURIComponent(spanishName)}</h2>
+        <button 
+          className="btn btn-lg btn-success" 
+          onClick={() => navigate(`/animal-form/${encodeURIComponent(spanishName)}`, {
+          state: { lat: countryData.lat, lng: countryData.lng }
+        })}
+        > Agregar animal 
+          <i class="bi bi-plus-circle-fill" style={{ margin: '6px'}}></i>
+        </button>
+      </div>
       <h4>Animales endémicos del país</h4>
       <div className="row">
         <div className="col col-7">
