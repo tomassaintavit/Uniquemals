@@ -3,6 +3,9 @@ import WorldMap from './components/WorldMap';
 import NavigationBar from './components/Navbar';
 import Country from './components/Country';
 import AnimalForm from "./components/forms/Animal";
+import AnimalDetails from './components/AnimalDetails';
+import EditAnimal from "./components/EditAnimal";
+
 
 
 function App() {
@@ -19,7 +22,8 @@ function App() {
         {/* <WorldMap onCountryDetected={handleCountryDetected} /> */}
         <Route path="/country/:name" element={<Country />} />
         <Route path="/animal-form/:name" element={<AnimalForm />} />
-        
+        <Route path="/animal/:id" element={<AnimalDetails />} />
+        <Route path="/edit-animal/:id" element={<EditAnimal />} />
       </Routes>
       
     </Router>

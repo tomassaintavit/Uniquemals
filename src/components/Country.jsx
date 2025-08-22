@@ -53,6 +53,15 @@ const Country = () => {
                   <td>
                     {a.image_url && <img src={a.image_url} alt={a.name} width="150" />}
                   </td>
+                  <td>
+                    <button 
+                        className="btn btn-sm btn-primary"
+                        onClick={() => navigate(`/animal/${a.id}`, {
+                          state: { name: name, lat: countryData.lat, lng: countryData.lng } })}
+                    >
+                      Ver
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
