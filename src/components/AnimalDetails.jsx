@@ -1,5 +1,6 @@
 import { useParams, useNavigate, useLocation} from "react-router-dom";
 import { useEffect, useState } from "react";
+import ConfirmDialog from '../utils/ConfirmDialog';
 
 const AnimalDetails = () => {
   const { id } = useParams();
@@ -7,6 +8,9 @@ const AnimalDetails = () => {
   const [animal, setAnimal] = useState(null);
   const location = useLocation();
   const { name, lat, lng } = location.state || {};
+  const [showConfirm, setShowConfirm] = useState(false);
+  // const [loadingDelete, setLoadingDelete] = useState(false);
+
 
   useEffect(() => {
     fetch(`http://localhost:4000/animal/${id}`)
@@ -15,20 +19,51 @@ const AnimalDetails = () => {
       .catch(err => console.error(err));
   }, [id]);
 
-  const handleDelete = async () => {
-    if (!window.confirm("¿Seguro que quieres eliminar este animal?")) return;
+  // const handleDelete = async () => {
+  //   if (!window.confirm("¿Seguro que quieres eliminar este animal?")) return;
 
+  //   try {
+  //     const resp = await fetch(`http://localhost:4000/animal/${id}`, {
+  //       method: "DELETE",
+  //     });
+  //     if (!resp.ok) throw new Error("Error al eliminar");
+  //     alert("Animal eliminado");
+  //     navigate(-1); // vuelve a la página anterior
+  //   } catch (err) {
+  //     console.error(err);
+  //     alert("Error al borrar");
+  //   }
+  // };
+
+  const handleDelete = async () => {
+    //setLoadingDelete(true);
+    setShowConfirm(false);
     try {
       const resp = await fetch(`http://localhost:4000/animal/${id}`, {
         method: "DELETE",
       });
       if (!resp.ok) throw new Error("Error al eliminar");
-      alert("Animal eliminado");
-      navigate(-1); // vuelve a la página anterior
+
+      navigate(`/country/${encodeURIComponent(animal.country)}`, {
+        state: {
+          alert: { type: "success", message: "Animal eliminado correctamente 🗑️" },
+          lat,
+          lng
+        }
+      });
     } catch (err) {
       console.error(err);
-      alert("Error al borrar");
-    }
+      navigate(`/country/${encodeURIComponent(animal.country)}`, {
+        state: {
+          alert: { type: "danger", message: "Error al eliminar el animal ❌" },
+          lat,
+          lng
+        }
+      });
+     } 
+     // finally {
+    //   setLoadingDelete(false);
+    // }
   };
 
   if (!animal) return <p>Cargando...</p>;
@@ -53,10 +88,17 @@ const AnimalDetails = () => {
         >
           Editar
         </button>
-        <button className="btn btn-danger" onClick={handleDelete}>
+        <button className="btn btn-danger" onClick={() => setShowConfirm(true)}>
           Eliminar
         </button>
       </div>
+      <ConfirmDialog
+        show={showConfirm}
+        title="Confirmar eliminación"
+        message={`¿Seguro que deseas eliminar a ${animal.name}?`}
+        onConfirm={handleDelete}
+        onCancel={() => setShowConfirm(false)}
+      />
     </div>
   );
 };

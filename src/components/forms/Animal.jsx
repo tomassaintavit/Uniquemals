@@ -1,11 +1,13 @@
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useState } from "react";
+import AlertMessage from "../../utils/AlertMessage";
 
 const AnimalForm = () => {
-  const { name } = useParams(); // país en español
+  const { name } = useParams(); 
   const navigate = useNavigate();
   const location = useLocation();
   const { lat, lng } = location.state || {};
+  const [alert, setAlert] = useState(null);
 
   const [form, setForm] = useState({
     name: "",
@@ -29,19 +31,29 @@ const AnimalForm = () => {
 
       if (!resp.ok) throw new Error("Error al guardar en la base");
 
-      alert("Animal agregado correctamente ✅");
-      navigate(`/country/${encodeURIComponent(name)}`,{
+      setAlert({ type: "success", message: "Animal agregado correctamente ✅" });
+      setTimeout(() => {
+        navigate(`/country/${encodeURIComponent(name)}`,{
       state: { lat, lng }
       });
+      }, 2000);
+      
     } catch (err) {
       console.error(err);
-      alert("Hubo un error");
+      setAlert({ type: "danger", message: "Error al agregar el animal ❌" });
     }
   };
 
   return (
     <div className="container mt-4">
       <h2>Agregar animal a {decodeURIComponent(name)}</h2>
+      {alert && (
+        <AlertMessage
+          type={alert.type}
+          message={alert.message}
+          onClose={() => setAlert(null)}
+        />
+      )}
       <form onSubmit={handleSubmit}>
         <div className="mb-3">
           <label className="form-label">Nombre</label>
