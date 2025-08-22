@@ -5,6 +5,7 @@ import Country from './components/Country';
 import AnimalForm from "./components/forms/Animal";
 import AnimalDetails from './components/AnimalDetails';
 import EditAnimal from "./components/EditAnimal";
+import About from "./components/About";
 
 
 
@@ -24,6 +25,7 @@ function App() {
         <Route path="/animal-form/:name" element={<AnimalForm />} />
         <Route path="/animal/:id" element={<AnimalDetails />} />
         <Route path="/edit-animal/:id" element={<EditAnimal />} />
+        <Route path="/about" element={<About />} />
       </Routes>
       
     </Router>
