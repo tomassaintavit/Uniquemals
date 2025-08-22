@@ -48,7 +48,8 @@ const AnimalDetails = () => {
       <div className="mt-3">
         <button 
           className="btn btn-warning me-2"
-          onClick={() => navigate(`/edit-animal/${animal.id}`)}
+          onClick={() => navigate(`/edit-animal/${animal.id}`, {
+                          state: { name: name, lat: lat, lng: lng } })}
         >
           Editar
         </button>

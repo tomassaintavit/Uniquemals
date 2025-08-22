@@ -4,7 +4,7 @@ import NavigationBar from './components/Navbar';
 import Country from './components/Country';
 import AnimalForm from "./components/forms/Animal";
 import AnimalDetails from './components/AnimalDetails';
-import EditAnimal from "./components/EditAnimal";
+import EditAnimal from "./components/forms/EditAnimal";
 import About from "./components/About";
 
 

@@ -1,10 +1,12 @@
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
 
 const EditAnimal = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [form, setForm] = useState({ name: "", description: "", image_url: "" });
+  const location = useLocation();
+  const { name, lat, lng } = location.state || {};
 
   useEffect(() => {
     fetch(`http://localhost:4000/animal/${id}`)
@@ -31,7 +33,9 @@ const EditAnimal = () => {
     }
 
     alert("Animal actualizado ✅");
-    navigate(`/animal/${id}`);
+    console.log('Nombre:', name , 'Latitud:', lat)
+    navigate(`/animal/${id}`, {
+      state: { name: name, lat: lat, lng: lng } });
   };
 
   return (
