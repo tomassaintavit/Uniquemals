@@ -9,7 +9,7 @@ const AnimalDetails = () => {
   const location = useLocation();
   const { name, lat, lng } = location.state || {};
   const [showConfirm, setShowConfirm] = useState(false);
-  // const [loadingDelete, setLoadingDelete] = useState(false);
+  const [loadingDelete, setLoadingDelete] = useState(false);
 
 
   useEffect(() => {
@@ -19,24 +19,9 @@ const AnimalDetails = () => {
       .catch(err => console.error(err));
   }, [id]);
 
-  // const handleDelete = async () => {
-  //   if (!window.confirm("¿Seguro que quieres eliminar este animal?")) return;
-
-  //   try {
-  //     const resp = await fetch(`http://localhost:4000/animal/${id}`, {
-  //       method: "DELETE",
-  //     });
-  //     if (!resp.ok) throw new Error("Error al eliminar");
-  //     alert("Animal eliminado");
-  //     navigate(-1); // vuelve a la página anterior
-  //   } catch (err) {
-  //     console.error(err);
-  //     alert("Error al borrar");
-  //   }
-  // };
 
   const handleDelete = async () => {
-    //setLoadingDelete(true);
+    setLoadingDelete(true);
     setShowConfirm(false);
     try {
       const resp = await fetch(`http://localhost:4000/animal/${id}`, {
@@ -61,9 +46,9 @@ const AnimalDetails = () => {
         }
       });
      } 
-     // finally {
-    //   setLoadingDelete(false);
-    // }
+     finally {
+      setLoadingDelete(false);
+    }
   };
 
   if (!animal) return <p>Cargando...</p>;

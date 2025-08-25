@@ -1,4 +1,4 @@
-const ConfirmDialog = ({ show, title, message, onConfirm, onCancel }) => {
+const ConfirmDialog = ({ show, title, message, onConfirm, onCancel, loading }) => {
   if (!show) return null;
 
   return (
@@ -13,11 +13,18 @@ const ConfirmDialog = ({ show, title, message, onConfirm, onCancel }) => {
             <p>{message}</p>
           </div>
           <div className="modal-footer">
-            <button type="button" className="btn btn-secondary" onClick={onCancel}>
+            <button type="button" className="btn btn-secondary" onClick={onCancel} disabled={loading}>
               No
             </button>
-            <button type="button" className="btn btn-danger" onClick={onConfirm} >
-              Sí, eliminar
+            <button type="button" className="btn btn-danger" onClick={onConfirm} disabled={loading}>
+              {loading ? (
+                <>
+                  <span className="spinner-border spinner-border-sm me-2"></span>
+                  Eliminando...
+                </>
+              ) : (
+                "Sí, eliminar"
+              )}
             </button>
           </div>
         </div>

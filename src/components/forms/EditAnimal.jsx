@@ -1,5 +1,6 @@
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { useState, useEffect } from "react";
+import AlertMessage from "../../utils/AlertMessage";
 
 const EditAnimal = () => {
   const { id } = useParams();
@@ -7,6 +8,7 @@ const EditAnimal = () => {
   const [form, setForm] = useState({ name: "", description: "", image_url: "" });
   const location = useLocation();
   const { name, lat, lng } = location.state || {};
+  const [alert, setAlert] = useState(null);
 
   useEffect(() => {
     fetch(`http://localhost:4000/animal/${id}`)
@@ -28,14 +30,16 @@ const EditAnimal = () => {
     });
 
     if (!resp.ok) {
-      alert("Error al actualizar");
+      setAlert({ type: "danger", message: "Error al editar el animal ❌" });
       return;
     }
 
-    alert("Animal actualizado ✅");
-    console.log('Nombre:', name , 'Latitud:', lat)
-    navigate(`/animal/${id}`, {
+    setAlert({ type: "success", message: "Animal editado correctamente ✅" });
+    setTimeout(() => {
+        navigate(`/animal/${id}`, {
       state: { name: name, lat: lat, lng: lng } });
+      }, 2000);
+    
   };
 
   return (
@@ -56,6 +60,14 @@ const EditAnimal = () => {
         </div>
         <button type="submit" className="btn btn-primary">Guardar cambios</button>
       </form>
+      <span></span>
+      {alert && (
+        <AlertMessage
+          type={alert.type}
+          message={alert.message}
+          onClose={() => setAlert(null)}
+        />
+      )}
     </div>
   );
 };
