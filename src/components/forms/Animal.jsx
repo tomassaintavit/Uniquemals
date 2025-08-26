@@ -8,6 +8,7 @@ const AnimalForm = () => {
   const location = useLocation();
   const { lat, lng } = location.state || {};
   const [alert, setAlert] = useState(null);
+  const API_URL = process.env.REACT_APP_BACKEND_URL;
 
   const [form, setForm] = useState({
     name: "",
@@ -23,7 +24,8 @@ const AnimalForm = () => {
     e.preventDefault();
 
     try {
-      const resp = await fetch("http://localhost:4000/add-animal", {
+      // const resp = await fetch("http://localhost:4000/add-animal"
+      const resp = await fetch(`${API_URL}/add-animal`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ...form, country: name })

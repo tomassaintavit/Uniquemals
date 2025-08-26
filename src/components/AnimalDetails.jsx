@@ -10,10 +10,11 @@ const AnimalDetails = () => {
   const { name, lat, lng } = location.state || {};
   const [showConfirm, setShowConfirm] = useState(false);
   const [loadingDelete, setLoadingDelete] = useState(false);
+  const API_URL = process.env.REACT_APP_BACKEND_URL;
 
-
+ //fetch(`http://localhost:4000/animal/${id}`)
   useEffect(() => {
-    fetch(`http://localhost:4000/animal/${id}`)
+    fetch(`${API_URL}/animal/${id}`)
       .then(res => res.json())
       .then(data => setAnimal(data))
       .catch(err => console.error(err));
@@ -23,8 +24,8 @@ const AnimalDetails = () => {
   const handleDelete = async () => {
     setLoadingDelete(true);
     setShowConfirm(false);
-    try {
-      const resp = await fetch(`http://localhost:4000/animal/${id}`, {
+    try { //fetch(`http://localhost:4000/animal/${id}`
+      const resp = await fetch(`${API_URL}/animal/${id}`, {
         method: "DELETE",
       });
       if (!resp.ok) throw new Error("Error al eliminar");

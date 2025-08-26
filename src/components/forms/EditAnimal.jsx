@@ -9,9 +9,11 @@ const EditAnimal = () => {
   const location = useLocation();
   const { name, lat, lng } = location.state || {};
   const [alert, setAlert] = useState(null);
+  const API_URL = process.env.REACT_APP_BACKEND_URL;
 
   useEffect(() => {
-    fetch(`http://localhost:4000/animal/${id}`)
+    // fetch(`http://localhost:4000/animal/${id}`)
+    fetch(`${API_URL}/animal/${id}`)
       .then(res => res.json())
       .then(data => setForm(data));
   }, [id]);
@@ -23,7 +25,8 @@ const EditAnimal = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const resp = await fetch(`http://localhost:4000/animal/${id}`, {
+    //const resp = await fetch(`http://localhost:4000/animal/${id}
+    const resp = await fetch(`${API_URL}/animal/${id}`, {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(form),

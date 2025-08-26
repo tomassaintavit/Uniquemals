@@ -16,10 +16,12 @@ const Country = () => {
   const [page, setPage] = useState(1);
   const [total, setTotal] = useState(0);
   const limit = 20;
+  const API_URL = process.env.REACT_APP_BACKEND_URL;
 
   useEffect(() => {
-    setLoading(true);
-    fetch(`http://localhost:4000/animales/${decodeURIComponent(spanishName)}?limit=${limit}&offset=${(page - 1) * limit}`)
+    setLoading(true); 
+    //  fetch(`http://localhost:4000/animales/${decodeURIComponent(spanishName)}?limit=${limit}&offset=${(page - 1) * limit}`)
+    fetch(`${API_URL}/animales/${decodeURIComponent(spanishName)}?limit=${limit}&offset=${(page - 1) * limit}`)
       .then(res => res.json())
       .then(data => 
         { 
