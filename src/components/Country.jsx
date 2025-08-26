@@ -13,14 +13,22 @@ const Country = () => {
   
   const [animales, setAnimales] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const limit = 20;
 
   useEffect(() => {
-    fetch(`http://localhost:4000/animales/${decodeURIComponent(spanishName)}`)
+    setLoading(true);
+    fetch(`http://localhost:4000/animales/${decodeURIComponent(spanishName)}?limit=${limit}&offset=${(page - 1) * limit}`)
       .then(res => res.json())
-      .then(data => setAnimales(data))
+      .then(data => 
+        { 
+          setAnimales(data.animals || []);
+          setTotal(data.total || 0);
+        })
       .catch(err => console.error(err))
       .finally(() => setLoading(false));
-  }, [name]);
+  }, [name, page]);
 
   return (
     <div className="container mt-4">
@@ -81,7 +89,6 @@ const Country = () => {
             </div>
           )}
         
-
         <div className="col col-5">
           <MapContainer center={[countryData.lat, countryData.lng]} zoom={4} style={{ height: '50vh', width: '100%' }}>
             <TileLayer
@@ -90,6 +97,31 @@ const Country = () => {
             /> 
           </MapContainer>
         </div>
+        {!loading && animales.length > 0 && (
+            <nav>
+              <ul className="pagination">
+                <li className={`page-item ${page === 1 ? "disabled" : ""}`}>
+                  <button className="page-link" onClick={() => setPage(page - 1)}>
+                    Anterior
+                  </button>
+                </li>
+
+                {Array.from({ length: Math.ceil(total / limit) }, (_, i) => (
+                  <li key={i} className={`page-item ${page === i + 1 ? "active" : ""}`}>
+                    <button className="page-link" onClick={() => setPage(i + 1)}>
+                      {i + 1}
+                    </button>
+                  </li>
+                ))}
+
+                <li className={`page-item ${page === Math.ceil(total / limit) ? "disabled" : ""}`}>
+                  <button className="page-link" onClick={() => setPage(page + 1)}>
+                    Siguiente
+                  </button>
+                </li>
+              </ul>
+            </nav>
+          )}
       </div>
     </div>
   );
