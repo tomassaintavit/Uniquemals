@@ -12,17 +12,18 @@ const Country = () => {
   const navigate = useNavigate();
   
   const [animales, setAnimales] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     fetch(`http://localhost:4000/animales/${decodeURIComponent(spanishName)}`)
       .then(res => res.json())
       .then(data => setAnimales(data))
-      .catch(err => console.error(err));
+      .catch(err => console.error(err))
+      .finally(() => setLoading(false));
   }, [name]);
 
   return (
     <div className="container mt-4">
-      
       <div className="d-flex justify-content-between align-items-center mb-4">
         <h2 className="mb-4">{decodeURIComponent(spanishName)}</h2>
         <button 
@@ -36,37 +37,50 @@ const Country = () => {
       </div>
       <h4>Animales endémicos del país</h4>
       <div className="row">
-        <div className="col col-7">
-          <table className="table">
-            <thead className="thead-dark">
-              <tr>
-                <th>Nombre</th>
-                <th>Características</th>
-                <th>Imagen</th>
-              </tr>
-            </thead>
-            <tbody>
-              {animales.map(a => (
-                <tr key={a.id}>
-                  <td>{a.name}</td>
-                  <td>{a.description}</td>
-                  <td>
-                    {a.image_url && <img src={a.image_url} alt={a.name} width="150" />}
-                  </td>
-                  <td>
-                    <button 
-                        className="btn btn-sm btn-primary"
-                        onClick={() => navigate(`/animal/${a.id}`, {
-                          state: { name: name, lat: countryData.lat, lng: countryData.lng } })}
-                    >
-                      Ver
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        {loading ? ( // 🔹 Spinner de Bootstrap
+            <div className="d-flex justify-content-center align-items-center" style={{ height: "40vh" }}>
+              <div className="spinner-border text-primary" role="status">
+                <span className="visually-hidden">Cargando...</span>
+              </div>
+            </div>
+          ) : animales.length === 0 ? (
+            <p>No se encontraron animales para este país.</p>
+          ) : (
+            <div className="col col-7">
+              <table className="table">
+                <thead className="thead-dark">
+                  <tr>
+                    <th>Nombre</th>
+                    <th>Características</th>
+                    <th>Imagen</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {animales.map(a => (
+                    <tr key={a.id}>
+                      <td>{a.name}</td>
+                      <td>{a.description}</td>
+                      <td>
+                        {a.image_url && <img src={a.image_url} alt={a.name} width="150" />}
+                      </td>
+                      <td>
+                        <button 
+                          className="btn btn-sm btn-primary"
+                          onClick={() => navigate(`/animal/${a.id}`, {
+                            state: { name: name, lat: countryData.lat, lng: countryData.lng }
+                          })}
+                        >
+                          Ver
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+        
 
         <div className="col col-5">
           <MapContainer center={[countryData.lat, countryData.lng]} zoom={4} style={{ height: '50vh', width: '100%' }}>

@@ -5,7 +5,7 @@ const About = () => {
         <div className="card-body">
           <h1 className="card-title mb-4 text-center">Acerca de Uniquemals</h1>
           <p className="card-text">
-            <strong>Uniquemals</strong> es un proyecto <u>público y gratuito</u> 
+            <strong>Uniquemals</strong> es un proyecto <u>público y gratuito </u> 
             desarrollado como parte de mi portfolio. El objetivo es mostrar mis 
             habilidades en tecnologías como <strong>React, Node.js, Express, Supabase y Leaflet</strong>.
           </p>
